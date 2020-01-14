@@ -1,11 +1,9 @@
 const express = require('express')
 const app = express()
-const port = 8080
+const port = 5000
+const route = require('./src/route')
 
-app.get('/', (req, res) => res.send('Hello World'))
 
-app.get('/abc', (req,res) => {
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ a: 1 }))
-})
-app.listen(port, () => console.log(`Example App Listening on port ${port}`))
+route.init(app);
+
+app.listen(port, () => console.log(`App Listening on port ${port}`));
