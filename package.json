@@ -1,0 +1,14 @@
+{
+  "name": "dev-api-metro",
+  "version": "1.0.0",
+  "description": "dummy api using nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "anjar widiyatmoko",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
