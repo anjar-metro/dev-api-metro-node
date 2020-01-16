@@ -1,5 +1,5 @@
-const area = require('./src/data/area')
-const mitra = require('./src/data/mitra')
+const area = require('./data/area')
+const mitra = require('./data/mitra')
 
 module.exports = {
     init: function(app) {
