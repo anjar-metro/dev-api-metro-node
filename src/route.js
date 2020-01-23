@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const area = require('./data/area')
 const mitra = require('./data/mitra')
 const transact = require('./data/report')
