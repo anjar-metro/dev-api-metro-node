@@ -1,7 +1,10 @@
 const querystring = require('querystring');
 const area = require('./data/area')
 const mitra = require('./data/mitra')
-const transact = require('./data/report')
+const report = require('./data/report')
+const virtual = require('./data/virtual')
+const ppob = require('./data/ppob')
+const apps = require('./data/apps')
 
 module.exports = {
     init: function(app) {
@@ -9,7 +12,10 @@ module.exports = {
 
         area.bind(app)
         mitra.bind(app)
-        transact.bind(app)
+        report.bind(app)
+        virtual.bind(app)
+        ppob.bind(app)
+        apps.bind(app)
         
     } 
 }  
