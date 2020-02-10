@@ -1,11 +1,13 @@
-const querystring = require('querystring');
+
+/* const querystring = require('querystring')
 const area = require('./data/area')
 const mitra = require('./data/mitra')
 const report = require('./data/report')
 const virtual = require('./data/virtual')
 const ppob = require('./data/ppob')
 const apps = require('./data/apps')
-const setting = require('./data/setting')
+const setting = require('./data/setting')  
+
 
 module.exports = {
     init: function(app) {
@@ -20,4 +22,8 @@ module.exports = {
         setting.bind(app)
         
     } 
-}  
+}   */
+
+const area = require('routes/area')
+
+module.exports = area
