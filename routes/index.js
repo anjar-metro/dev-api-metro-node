@@ -3,26 +3,35 @@ const router = express.Router()
 const Area = require('../controllers/Area')
 
 router.get(`/area/ListArea`, (req,res) => {
-    let host, db, coll
+    // let host, db 
+    let db = req.app.locals.db
+    let coll = db.collection("area")
     const ID = 'GET:AREA:LIST_AREA:JSON'
 
     try {
-        host = req.headers.host
-        db = req.app.locals.db
+        // host = req.headers.host
+        // db = req.app.locals.db
         coll = db.collection("area")
 
-        let per_page = parseInt( req.query.per_page  ) || 10
-        
         // Website you wish to allow to connect
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Content-Type', 'application/json') 
  
+        /* coll.find({}).limit(2).toArray()
+            .then(value => {
+                console.log(value)
+                return value
+            })
+            .catch(err => {
+                console.log('Error@queryHelper:getQueryDocument')
+            }) */
         Area.getListArea(req, coll) // async
-            .then(template => {
-                console.log( template)
+            .then( json_template  => {
+                console.log(  'OUTPUT JSON: ' )
+                console.log(  json_template )
                 res
                     .status(202)
-                    .jsonp(template)
+                    .jsonp( json_template )
             })
 
         

@@ -1,4 +1,5 @@
-const queryHelper = require('../helpers/QueryHelper')
+const QueryHelper = require('../helpers/QueryHelper')
+const dataProviderHelper = require('../helpers/dataProviderHelper')
 
 const Area = {
     template: {
@@ -23,10 +24,12 @@ const Area = {
         // .jsonp( { data: result} )
     }, */
     async getListArea(req, collection ) {
-        let qh = queryHelper
-            qh.collection = collection
+        let dataProvider = dataProviderHelper
 
-        let per_page = parseInt( req.query.per_page)
+        // let qh = QueryHelper
+        //     qh.collection = collection
+
+        /* let per_page = parseInt( req.query.per_page)
 
         // console.log(collection.countDocuments())
         this.template = await qh.countAllDocument(collection)
@@ -50,9 +53,10 @@ const Area = {
                 console.log('Error @Area:getListArea', err)
                 // return err
             })
+            // return this.template */
+             
+        return dataProvider.fetchData(req, collection)
 
-
-        return this.template
 
         // collection.countDocuments()
         // .then(numItem => {
