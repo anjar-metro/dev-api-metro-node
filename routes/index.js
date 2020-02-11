@@ -27,8 +27,6 @@ router.get(`/area/ListArea`, (req,res) => {
             }) */
         Area.getListArea(req, coll) // async
             .then( json_template  => {
-                console.log(  'OUTPUT JSON: ' )
-                console.log(  json_template )
                 res
                     .status(202)
                     .jsonp( json_template )
