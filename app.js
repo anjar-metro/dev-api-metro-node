@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const mongoClient = require('mongodb').MongoClient
 // const router = require('route')
 // const area = require('./routes/area')
@@ -9,6 +10,9 @@ const route = require('./routes/index')
 const port = 5000
 const mongo_url = "mongodb://mongoadmin:mongoadmin@localhost:27018"
 const mongo_db = "metrotest01"
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(route)
 app.use('/images', express.static(__dirname + '/images'))

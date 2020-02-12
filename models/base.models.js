@@ -1,29 +1,30 @@
-const QueryHelper = {
-    /** * 
-     * @param {object} collection 
-     * @returns {integer} TotalData
-     */ 
-    async countAllDocument(collection){
-        return collection.countDocuments()
+const baseModel = {
+    collection: null,
+    setConnection(db, collection){
+        this.db         = db
+        this.collection = collection
+    },
+    async countAllDocument(){
+        return this.collection.countDocuments()
             .then(numItem => {
                 return numItem
             })
             .catch(err => {
-                console.log('Error@queryHelper:countAllDocument')
+                console.log('Error@baseModel:countAllDocument')
                 return null
             })
     },
     async countQueryDocument(collection){
 
     },
-    async getQueryDataDocument(req, collection){
+    async getQueryDataDocument(req ){
         let per_page = parseInt( req.query.per_page )|| 10
         let current_page = parseInt( req.query.page)||1
         let sort_param = req.query.sort || "_id|asc"
         let sort = sort_param.split("|")
         let Order = `{ "${sort[0]}"  :  ${sort[1] == "asc" ? 1 : -1} }`
 
-        return collection
+        return this.collection
                 .find({}) 
                 .limit(per_page)
                 .sort( JSON.parse(Order) )
@@ -33,21 +34,20 @@ const QueryHelper = {
                 return value
             })
             .catch(err => {
-                console.log('Error@queryHelper:getQueryDataDocument')
+                console.log('Error@baseModel:getQueryDataDocument')
             })
     },
-    async insertOne(req, collection, obj){
-        const db = req.app.locals.db
-        console.log(collection)
-        /* obj.id = this.getNextSequenceValue(req, collection, sequenceName)
-        collection.insertOne(obj, function(err, res) {
+    insertOne(DataObj){
+        
+        this.collection.insertOne(DataObj, function(err, res){
             if( err ){
-                console.log('ERROR: QueryHelpder:insertOne', err)
-                return err 
+                console.log('ERROR: baseModel:insertOne', err)
+                return err
             }
-
             return res
-        }) */
+
+        })
+         
     },
     getNextSequenceValue(collection, sequenceName){
 
@@ -58,11 +58,10 @@ const QueryHelper = {
         });
          
         return sequenceDocument.sequence_value;
-     }
-
-
-
+    },
+    validate(){
+        // TODO: Put Validation Before Insert Data
+    }
 }
 
-module.exports = QueryHelper
-
+module.exports = baseModel

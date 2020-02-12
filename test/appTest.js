@@ -1,7 +1,7 @@
-const assert = require('chai').assert
+/*const assert = require('chai').assert
 const sayHello = require('../app').sayHello
 
-describe('App', function(){
+ describe('App', function(){
     it('sayHello Should Return Hello',function(){
         let result = sayHello()
         assert.equal(result, 'hello')
@@ -12,3 +12,4 @@ describe('App', function(){
         assert.typeOf(result, 'string')
     })
 })
+ */

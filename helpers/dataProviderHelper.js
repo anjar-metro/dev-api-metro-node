@@ -1,6 +1,4 @@
 /** Data Provider : For data Table Provider  */
-const QueryHelper  = require('./QueryHelper')
-
 
 const dataProviderHelper = {
     template: {
@@ -20,8 +18,51 @@ const dataProviderHelper = {
         await this._formatPaging(req, collection)
 
         return this.template
+    }, 
+    async fetch(req, model){
+        this.template.data = await  this._queryData(req, model)
+        await this._formatPagination(req, model)
+
+        return this.template
     },
-    async _queryData(req, collection){
+    async _queryData(req, model){
+        let per_page = parseInt(req.query.per_page) || 10
+        let current_page = parseInt(req.query.page) || 1
+
+        let no = current_page > 1 ? 
+            ( ( ( current_page - 1 ) * per_page ) + 1) : 1
+        
+        // let _data = await QueryHelper.getQueryDataDocument(req, collection)
+        let _data = await model.getQueryDataDocument(req)
+            _data.forEach((item, index) => {
+                _data[index].no = no 
+                no++
+            }) 
+        return _data
+    },
+    
+    async _formatPagination(req, model){
+        this.template.per_page = parseInt(req.query.per_page ) || 10
+        this.template.current_page = parseInt(req.query.page) || 1
+
+        return model.countAllDocument()
+        .then( totalItem => {
+            this.template.total =  totalItem
+            this.template.last_page =  Math.ceil(totalItem / this.template.per_page )
+            this.template.next_page_url = `http://${req.headers.host}/area/ListArea?page=${parseInt(req.query.page) >= this.template.last_page ? this.template.last_page : (parseInt(req.query.page)+1)}&per_page=${req.query.per_page}&sort=${req.query.sort||null}`
+            this.template.prev_page_url = `http://${req.headers.host}/area/ListArea?page=${parseInt(req.query.page) <= 1 ? 1 : (parseInt(req.query.page)-1)}&per_page=${req.query.per_page}&sort=${req.query.sort||null}`
+            this.template.from = ( ( this.template.current_page - 1 ) * this.template.per_page ) + 1
+            this.template.to   = this.template.from  + this.template.data.length -1
+                return this.template 
+            })
+            .catch(err => {
+                console.log('Error @dataProviderHelper:_formatPaging', err)
+            })
+
+    },
+
+    // Deprecated
+    async __queryData(req, collection){
         let per_page = parseInt(req.query.per_page) || 10
         let current_page = parseInt(req.query.page) || 1
 
@@ -36,6 +77,7 @@ const dataProviderHelper = {
             }) 
         return _data
     },
+    // Deprecated
     async _formatPaging(req, collection){
         this.template.per_page = parseInt(req.query.per_page ) || 10
         this.template.current_page = parseInt(req.query.page) || 1
