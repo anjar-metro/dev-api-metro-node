@@ -1,8 +1,17 @@
 const baseModel = {
-    collection: null,
+    db: null, collection: null, collectionName: null,
+    counterName: "counters",
     setConnection(db, collection){
         this.db         = db
         this.collection = collection
+    },
+    async updateId(DataObj){
+        return this.db.collection(this.counterName).findOneAndUpdate(
+                        { 'sequence_name' : this.collectionName }, 
+                        { $inc: { "sequence_value" : 1 } })
+                .then( result => { return  result })
+                .catch(err => { console.log('Error@baseModel:updateId', err )})
+        // return DataObj
     },
     async countAllDocument(){
         return this.collection.countDocuments()
@@ -30,24 +39,17 @@ const baseModel = {
                 .sort( JSON.parse(Order) )
                 .skip( current_page > 0 ? ( ( current_page - 1 ) * per_page ) : 0 )
             .toArray()
-            .then(value => {
-                return value
-            })
-            .catch(err => {
-                console.log('Error@baseModel:getQueryDataDocument')
-            })
+            .then(value => { return value })
+            .catch(err => { console.log('Error@baseModel:getQueryDataDocument') })
     },
-    insertOne(DataObj){
+    async insertOne(DataObj){
+        let counters = await this.updateId(DataObj)
         
-        this.collection.insertOne(DataObj, function(err, res){
-            if( err ){
-                console.log('ERROR: baseModel:insertOne', err)
-                return err
-            }
-            return res
-
-        })
-         
+        let sample = DataObj
+        sample.id = counters.value.sequence_value
+        console.log(sample)
+        
+        return await this.collection.insertOne(DataObj)
     },
     getNextSequenceValue(collection, sequenceName){
 

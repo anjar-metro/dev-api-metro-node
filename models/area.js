@@ -1,4 +1,4 @@
-var model = require('../models/base.models')
+var model = require('../models/baseModel')
 const dataProviderHelper = require('../helpers/dataProviderHelper')
 
 const schema = {

@@ -62,7 +62,7 @@ const Area = {
     index() {
 
     },
-    create_post(req, res){
+    async create_post(req, res){
         // area_model.insertOne()
         const db = req.app.locals.db
         const coll = db.collection('area')
@@ -75,10 +75,14 @@ const Area = {
         res.setHeader('Content-Type', 'application/json') 
   
         
-        let result = area_model.insertOne(dataBody)
-        console.log(result)        
-
-        res.jsonp( {result} )
+        let result = await area_model.insertOne(dataBody)
+            .then( res => { return res })
+            .catch( err => {
+                console.log(err )
+                throw err
+            })
+        // console.log(result)
+        res.jsonp( { code: result} )
     },
     delete() {
 
