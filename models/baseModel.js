@@ -1,17 +1,25 @@
+const jsonTemplate = require('./jsonTemplate')
+
 const baseModel = {
+    jsonTemplate: jsonTemplate,
     db: null, collection: null, collectionName: null,
     counterName: "counters",
     setConnection(db, collection){
         this.db         = db
         this.collection = collection
     },
-    async updateId(DataObj){
+    async updateId(){
         return this.db.collection(this.counterName).findOneAndUpdate(
                         { 'sequence_name' : this.collectionName }, 
                         { $inc: { "sequence_value" : 1 } })
                 .then( result => { return  result })
                 .catch(err => { console.log('Error@baseModel:updateId', err )})
         // return DataObj
+    },
+    async findOne(paramsObj){
+        return this.collection.findOne( paramsObj)
+                .then( value => { return value })
+                .catch( err => {console.log('Error@baseModel:findOne', err) ; throw err})
     },
     async countAllDocument(){
         return this.collection.countDocuments()
@@ -43,11 +51,9 @@ const baseModel = {
             .catch(err => { console.log('Error@baseModel:getQueryDataDocument') })
     },
     async insertOne(DataObj){
-        let counters = await this.updateId(DataObj)
+        let counters = await this.updateId()
         
-        let sample = DataObj
-        sample.id = counters.value.sequence_value
-        console.log(sample)
+        DataObj.id = counters.value.sequence_value
         
         return await this.collection.insertOne(DataObj)
     },

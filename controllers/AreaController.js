@@ -10,23 +10,7 @@ const Area = {
     },
     hello() {
         return 'Hello There'
-    }, 
-    /* getListArea(req, res, queryResult ) {
-        this.template.data = queryResult
-        this.template.total = 
-        // Set / Output Respose
-        this.setResponse(req, res, queryResult)
-            
-        // Area.setResponse(req, res, queryResult )
-        // Area.getListArea(req, res, result)
-        // res.status(202)
-        // .jsonp( { data: result} )
-    }, */
-    /* async getListArea(req, collection ) {
-        let dataProvider = dataProviderHelper
-
-        return dataProvider.fetchData(req, collection)
-    }, */
+    },  
     setResponse(req, res, queryResult){      
         this.template.data = queryResult
         
@@ -59,14 +43,36 @@ const Area = {
         }
         
     },
-    index() {
+    async detail(req, res) {
 
+        const db = req.app.locals.db
+        const coll = db.collection('area')
+        area_model.setConnection(db, coll)
+
+        let jsonRes = area_model.jsonTemplate
+
+        // console.log(area_model.jsonTemplate)
+        let result = await area_model.findOne({ id: parseInt(req.params.id)})
+            .then( value => { 
+                jsonRes.success = true
+                jsonRes.message = "Data Found"
+                jsonRes.data = value
+                return value 
+            })
+            .catch( err => { 
+                jsonRes.success = false
+                jsonRes.message = err
+            
+            })
+
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.setHeader('Content-Type', 'application/json') 
+        res.jsonp( jsonRes )
     },
     async create_post(req, res){
         // area_model.insertOne()
         const db = req.app.locals.db
         const coll = db.collection('area')
-
         area_model.setConnection(db, coll )
 
         const dataBody = req.body 
