@@ -7,7 +7,7 @@ const Area = {
         current_page: null, last_page: null,
         next_page_url: null, prev_page_url: null,
         from: null, to: null
-    },
+    },db: null, 
     hello() {
         return 'Hello There'
     },  
@@ -22,9 +22,8 @@ const Area = {
         let db = req.app.locals.db
         let coll = db.collection("area")
         const ID = 'GET:AREA:LIST_AREA:JSON'
-    
         try {
-            coll = db.collection("area")
+            // coll = db.collection("area")
     
             // Website you wish to allow to connect
             res.setHeader('Access-Control-Allow-Origin', '*')
@@ -44,30 +43,40 @@ const Area = {
         
     },
     async detail(req, res) {
-
+        
         const db = req.app.locals.db
         const coll = db.collection('area')
         area_model.setConnection(db, coll)
 
         let jsonRes = area_model.jsonTemplate
 
-        // console.log(area_model.jsonTemplate)
-        let result = await area_model.findOne({ id: parseInt(req.params.id)})
-            .then( value => { 
-                jsonRes.success = true
-                jsonRes.message = "Data Found"
-                jsonRes.data = value
-                return value 
-            })
-            .catch( err => { 
-                jsonRes.success = false
-                jsonRes.message = err
-            
-            })
+        try{
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            res.setHeader('Content-Type', 'application/json') 
+    
+    
+            area_model.findOne({ id: parseInt(req.params.id)})
+                .then( value => { 
+                    jsonRes.success = true
+                    jsonRes.message = "Data Found"
+                    jsonRes.data = value
 
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.setHeader('Content-Type', 'application/json') 
-        res.jsonp( jsonRes )
+                    res.status(200)
+                        .jsonp(jsonRes)
+                })
+                .catch( err => { 
+                    jsonRes.success = false
+                    jsonRes.message = err
+                
+                })
+
+        }catch (error) {
+            console.log(error)
+        }
+
+        
+
+        // res.jsonp( jsonRes )
     },
     async create_post(req, res){
         // area_model.insertOne()

@@ -1,0 +1,40 @@
+### AREA 
+GET http://localhost:5000/area/ListArea?per_page=2
+
+### CREATE AREA
+POST http://localhost:5000/area/create HTTP/1.1
+# POST http://localhost:5000/area/sample HTTP/1.1
+Content-Type: application/json
+
+{
+  "image" : "http://localhost:8080/img/avatar-s-5.73b9c8f8.png",
+  "nama_lokasi" : "RM. Sate Kambing Haji Nawi 3",
+  "tipe_lokasi" : "on street",
+  "provinsi" : "DKI Jakarta",
+  "kota" : "Jakarta Timur",
+  "kecamatan" : "Duren Sawit",
+  "tipe_parkir" : "Per Vehicle",
+  "action" : null,
+  "id" : 14,
+  "active" : true
+}
+
+### CREATE SAMPLE
+POST http://localhost:5000/sample HTTP/1.1 
+Content-Type: application/json
+
+{
+    "location_name": "Lokasi Baru",
+    "provinsi" : "DKI JAKARTA",
+    "tipe_lokasi" : "off street"
+} 
+
+### CREATE SAMPLE 2
+POST http://localhost:5001/sample HTTP/1.1 
+Content-Type: application/json
+
+{
+    "location_name": "Lokasi Baru",
+    "provinsi" : "DKI JAKARTA",
+    "tipe_lokasi" : "off street"
+} 
